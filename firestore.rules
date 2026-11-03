@@ -1,0 +1,69 @@
+rules_version = '2';
+
+// Regras do Firestore para o site de Álfani & Amanda.
+// Cole no Console do Firebase → Firestore Database → Regras → Publicar.
+// O administrador lê tudo pelo Console (lá as regras não se aplicam) ou pelo painel.
+//
+// ATENÇÃO: estas regras substituem as atuais do projeto inteiro.
+// Se a coleção antiga "presentes" (chá de casa nova) ainda for usada,
+// acrescente uma regra para ela antes de publicar.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Quem pode entrar no painel (painel.html): o mesmo e-mail cadastrado
+    // em Authentication. Para mais de uma pessoa: ['a@x.com', 'b@y.com'].
+    function admin() {
+      return request.auth != null
+          && request.auth.token.email in ['vitalsolucoesweb@gmail.com'];
+    }
+
+    // Status público de cada presente: todos leem; só dá para marcar como
+    // escolhido uma vez (criar o documento). Ninguém altera pelo site.
+    // O admin pode apagar (painel → "Apagar todos os presentes escolhidos",
+    // usado para zerar a lista depois de testes).
+    match /presentes-casamento-2026/{itemId} {
+      allow read: if true;
+      allow create: if request.resource.data.disponivel == false
+                    && request.resource.data.id is int
+                    && request.resource.data.keys().hasOnly(['id', 'item', 'categoria', 'disponivel', 'escolhidoEm']);
+      allow update: if false;
+      allow delete: if admin();
+    }
+
+    // Quem escolheu o quê (nome + WhatsApp): o site público só grava.
+    // O admin pode apagar junto com o reset da lista de presentes.
+    match /escolhas-presentes-2026/{escolhaId} {
+      allow create: if request.resource.data.keys().hasOnly(['nome', 'telefone', 'itens', 'criadoEm'])
+                    && request.resource.data.nome is string
+                    && request.resource.data.telefone.matches('^55[0-9]{10,11}$')
+                    && request.resource.data.itens is list
+                    && request.resource.data.itens.size() > 0;
+      allow read: if admin();     // só o admin lê
+      allow update: if false;
+      allow delete: if admin();
+    }
+
+    // RSVP: um documento por telefone (o id é o próprio número).
+    // "get" permite ao convidado ver a própria resposta; "list" fica bloqueado
+    // para ninguém baixar a lista inteira de convidados.
+    match /rsvp-casamento-2026/{telefone} {
+      allow get: if true;
+      allow list: if admin();      // só o painel lista todas as confirmações
+      allow create: if telefone.matches('^55[0-9]{10,11}$')
+                    && request.resource.data.telefone == telefone
+                    && request.resource.data.presenca in ['sim', 'nao']
+                    && request.resource.data.nome is string;
+      // só o mesmo nome pode alterar a resposta daquele número
+      allow update: if request.resource.data.telefone == telefone
+                    && request.resource.data.presenca in ['sim', 'nao']
+                    && request.resource.data.nome == resource.data.nome;
+      // painel: marcar/desmarcar "lembrado" (não mexe no resto da resposta)
+      allow update: if admin()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lembreteEm', 'lembretePor']);
+      // admin pode apagar (painel → "Apagar todas as confirmações (RSVP)",
+      // usado para zerar os convidados de teste antes de ir ao ar)
+      allow delete: if admin();
+    }
+  }
+}

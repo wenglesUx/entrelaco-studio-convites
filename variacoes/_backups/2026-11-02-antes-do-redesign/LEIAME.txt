@@ -1,0 +1,9 @@
+Backup dos convites 01 e 02 antes do redesign aprovado em 02/11/2026.
+
+A pasta compartilhado/ acompanha o backup para que as versões antigas abram sozinhas:
+  node variacoes/servir.mjs
+  http://localhost:4173/variacoes/_backups/2026-11-02-antes-do-redesign/01-aniversario-adulto/
+  http://localhost:4173/variacoes/_backups/2026-11-02-antes-do-redesign/02-festa-15-anos/
+
+Para restaurar um convite, copie a pasta dele de volta para variacoes/.
+Este backup não é usado pelos convites atuais e pode ser apagado quando não for mais necessário.
