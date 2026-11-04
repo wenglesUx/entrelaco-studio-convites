@@ -41,4 +41,5 @@ createServer((pedido, resposta) => {
     console.log(`Aniversário adulto: http://localhost:${porta}/variacoes/01-aniversario-adulto/`);
     console.log(`15 anos:            http://localhost:${porta}/variacoes/02-festa-15-anos/`);
     console.log(`Infantil Safari:    http://localhost:${porta}/variacoes/03-aniversario-infantil/`);
+    console.log(`Elo, Verão na Itália: http://localhost:${porta}/variacoes/04-elo-verao-na-italia/`);
 });

@@ -1,12 +1,13 @@
 # Catálogo de convites digitais · Entrelaço Studio
 
-Três convites demonstrativos construídos sobre a mesma base funcional, cada um com identidade visual própria. O convite de casamento continua na raiz do projeto e não depende de nada desta pasta.
+Três convites demonstrativos e um convite de cliente, construídos sobre a mesma base funcional, cada um com identidade visual própria. O convite de casamento continua na raiz do projeto e não depende de nada desta pasta.
 
 | Convite | Ocasião | Pasta | Ideia central |
 |---|---|---|---|
 | **Noite de Celebração** | Aniversários adultos, jantares | `01-aniversario-adulto/` | Editorial em blocos de cor ligados por imagens; o número da idade é preenchido por luz de velas |
 | **Noite de Estrelas** | Festa de 15 anos | `02-festa-15-anos/` | A página é a noite: constelação na abertura, céu amanhecendo no fim da rolagem |
 | **Pequenos Exploradores** | Infantil, tema Safari | `03-aniversario-infantil/` | Livro ilustrado com sol que nasce com a idade e bichos escondidos nas moitas |
+| **Elo · Verão na Itália** | Encontro de mulheres empreendedoras | `04-elo-verao-na-italia/` | Fotografias reais da costa amalfitana, toldo listrado, majólica e fotos em arcos |
 
 ## Como executar
 
@@ -23,6 +24,7 @@ node variacoes/servir.mjs
 | Aniversário adulto | http://localhost:4173/variacoes/01-aniversario-adulto/ |
 | 15 anos | http://localhost:4173/variacoes/02-festa-15-anos/ |
 | Infantil Safari | http://localhost:4173/variacoes/03-aniversario-infantil/ |
+| Elo, Verão na Itália | http://localhost:4173/variacoes/04-elo-verao-na-italia/ |
 
 Os convites usam módulos JavaScript, então não abrem com duplo clique no arquivo: use o servidor.
 
@@ -59,6 +61,17 @@ variacoes/
 ```
 
 O 02 tem ainda `constelacao.js` (abertura animada) e o 03 tem `ilustracoes.js` (os animais em SVG).
+
+## Convite 04 · Elo Mulheres que Movem
+
+Releitura do convite oficial publicado no Canva, com tema Verão na Itália. Instruções completas em [`04-elo-verao-na-italia/README.md`](04-elo-verao-na-italia/README.md). O conteúdo foi transcrito da página original e do flyer do evento: textos, programação, palestrantes, data, local, observação e apoiadores.
+
+- **Fotos do evento:** palestrantes, anfitriãs, espaço e logos de apoio vieram do convite original, recortados sem a interface do Instagram.
+- **Ambientação:** fotografias reais de Positano, Ravello, Capri e da majólica de Santa Chiara, baixadas do Wikimedia Commons com licenças livres (CC0, CC BY e CC BY-SA). As que exigem crédito aparecem no rodapé do convite; a lista fica em `config.js` → `creditosFotos`. As aquarelas do Canva **não** foram reaproveitadas, porque a licença do Canva não permite usar esses elementos fora da plataforma.
+- **Trocar uma foto de ambientação:** substitua o arquivo em `assets/fotos/` e ajuste `ambientacao` e `creditosFotos` em `config.js`.
+- **Confirmação:** no Canva, os botões "Localização" e "Confirmação" não tinham destino. Preencha `confirmacao.link` com o formulário que gera o QR code; sem ele, a confirmação é por WhatsApp (`whatsapp`). Com os dois vazios, o formulário fica em modo demonstração.
+- **Mapa:** o convite original não tem endereço nem coordenadas, então os botões buscam por "Espaço Kzarão, Jardim Zuleika". Se houver endereço completo, troque `local.busca`.
+- **Agenda:** o fim do evento na agenda é 18h30 (`evento.fim`), porque o convite só informa o encerramento às 18h.
 
 ## Personalizar para um cliente
 
